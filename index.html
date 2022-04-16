@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Document</title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/earlyaccess/notosanskr.css">
+    <link rel="stylesheet" href="style.css">
+
+    
+    <!--달력-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.js" charset = "UTF-8"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script>
+    $(function ($) {
+      $("#datepicker").datepicker({ dateFormat: "yy년mm월dd일" });
+    });
+    </script>
+
+    <script>
+      $.datepicker.setDefaults({
+        dateFormat: 'yy년mm월dd일',
+        prevText: '이전 달',
+        nextText: '다음 달',
+        monthNames: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        monthNamesShort: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+        dayNames: ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesShort: ['일', '월', '화', '수', '목', '금', '토'],
+        dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
+        showMonthAfterYear: true,
+        yearSuffix: '년'
+    });
+
+    $(function($) {
+      $("#datepicker").datepicker();
+    });
+
+    </script>
+    <!--달력end-->
+
+</head>
+
+<body>
+
+    <pre id= "postId"></pre>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+
+    <script>
+         var firebaseConfig = {
+            apiKey: "AIzaSyCBCx2LvtO4-sI_ARTUsQqnvaYelK3PJ3c",
+            authDomain: "test-e0ae3.firebaseapp.com",
+            databaseURL: "https://test-e0ae3-default-rtdb.firebaseio.com",
+            projectId: "test-e0ae3",
+            storageBucket: "test-e0ae3.appspot.com",
+            messagingSenderId: "897078235962",
+            appId: "1:897078235962:web:dadc56b3e939ffd152b603",
+            measurementId: "G-ELKW5QRN0T"
+            };
+            firebase.initializeApp(firebaseConfig);
+    </script>
+
+    <h1>인공지능(AI) Fitness Trainer</h1>
+
+    
+    
+
+    <div class="master">
+
+      <div class="button-container">
+        <button class="btn-primary"type="button" onclick="init()">Start</button>
+        <button id="create" class="btn-success">기록 저장</button>
+      </div>
+      
+      <div class="container">
+
+        <div class="webcam">
+          <div><canvas id="canvas"></canvas></div>
+          <div id="label-container"></div>
+        </div>
+
+          <div class="frame">
+              <div class="center">
+                  <div class="headline">
+                      <div class="small">push_up</div>Counter
+                  </div>
+                  <div class="circle-big">
+                      <div class="text">
+                          <span id="counter">0</span><div class="small">개</div>
+                      </div>
+                      <svg>
+                          <circle class="bg" cx="57" cy="57" r="52" />
+                          <circle class="progress" cx="57" cy="57" r="52" />
+                      </svg>
+                  </div>
+              </div>
+          </div>
+          
+      </div>
+
+      <div class="data-container">
+
+        <h2>자신의 기록을 확인해보세요</h2>
+    
+        <ul id="date"></ul>
+    
+        <input type="text" id="datepicker">
+    
+        <button id="check" class="btn btn-success">기록 확인</button>
+    
+        <p id="demo">날짜를 선택하세요</p>
+    
+      </div>
+
+  </div>
+
+ 
+</div>
+    </div>
+     
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/pose@0.8/dist/teachablemachine-pose.min.js"></script>
+    <script type="text/javascript">
+        // More API functions here:
+        // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/pose
+
+
+        // the link to your model provided by Teachable Machine export panel
+        const URL = "./my_model/";
+        let model, webcam, ctx, labelContainer, maxPredictions;
+
+        async function init() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+
+            // load the model and metadata
+            // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+            // Note: the pose library adds a tmPose object to your window (window.tmPose)
+            model = await tmPose.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
+
+            // Convenience function to setup a webcam
+            const size = 300;
+            const flip = true; // whether to flip the webcam
+            webcam = new tmPose.Webcam(size, size, flip); // width, height, flip
+            await webcam.setup(); // request access to the webcam
+            await webcam.play();
+            window.requestAnimationFrame(loop);
+
+            // append/get elements to the DOM
+            const canvas = document.getElementById("canvas");
+            canvas.width = size; canvas.height = size;
+            ctx = canvas.getContext("2d");
+            labelContainer = document.getElementById("label-container");
+            for (let i = 0; i < maxPredictions; i++) { // and class labels
+                labelContainer.appendChild(document.createElement("div"));
+            }
+        }
+
+        async function loop(timestamp) {
+            webcam.update(); // update the webcam frame
+            await predict();
+            window.requestAnimationFrame(loop);
+        }
+
+        var progress = 327
+        var status = "default"
+        var count = 0
+        async function predict() {
+            // Prediction #1: run input through posenet
+            // estimatePose can take in an image, video or canvas html element
+            const { pose, posenetOutput } = await model.estimatePose(webcam.canvas);
+            // Prediction 2: run input through teachable machine classification model
+            const prediction = await model.predict(posenetOutput);
+
+            if (prediction[0].probability.toFixed(2) > 0.90) {
+                if (status == "down") {
+                    count++
+                    var audio = new Audio(count % 10 + '.mp3');
+                    audio.play();
+                    progress = progress-32.7
+                    if(progress <= 0) {
+                        progress = 327-32.7
+                    }
+                    $('.progress').css('stroke-dashoffset', progress);
+                    $('#counter').html(count);
+                }
+                status = "default"
+            } else if (prediction[1].probability.toFixed(2) == 1.00) {
+                status = "down"
+            } else if (prediction[2].probability.toFixed(2) == 1.00) {
+                if (status == "down" || status == "default") {
+                    var audio = new Audio('wrong.mp3');
+                    audio.play();
+                }
+                status = "wrong"
+            }
+            for (let i = 0; i < maxPredictions; i++) {
+                const classPrediction =
+                    prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+                labelContainer.childNodes[i].innerHTML = classPrediction;
+            }
+
+            // finally draw the poses
+            drawPose(pose);
+        }
+
+        function drawPose(pose) {
+            if (webcam.canvas) {
+                ctx.drawImage(webcam.canvas, 0, 0);
+                // draw the keypoints and skeleton
+                if (pose) {
+                    const minPartConfidence = 0.5;
+                    tmPose.drawKeypoints(pose.keypoints, minPartConfidence, ctx);
+                    tmPose.drawSkeleton(pose.keypoints, minPartConfidence, ctx);
+                }
+            }
+        }
+
+    </script>
+
+    <!--파이어베이스-->
+
+    <script>
+        
+        
+        var database = firebase.database();
+
+        create.onclick = () => {
+
+          
+
+          var today = new Date();
+          // 'yy년mm월dd일',
+
+          var year = today.getFullYear()
+
+          var month = ("0" + (1 + today.getMonth())).slice(-2);
+          
+          var date = ("0" + today.getDate()).slice(-2);
+
+          let now = year + '년' + month + '월' + date + '일';
+
+          console.log(year + '년' + month + '월' + date + '일');
+
+          var dataRef = database.ref('date/' + now + '/').once('value').then(function(snapshot){
+            if(snapshot.val() == null){
+
+              database.ref('date/' + now + '/').set({"count": count})
+
+              alert(now +" 의 개수를 "+ count + "개로 저장하였습니다!");
+
+            }else{
+              // count 개수 수정
+              let str = JSON.stringify(snapshot.val());
+              let sub = str.slice(9,-1);
+
+              var savedcount = parseInt(sub); 
+              var newcount = savedcount + count;
+              database.ref('date/' + now + '/').set({"count": newcount});
+              alert(now +" 의 개수를 "+ newcount + "개로 수정하였습니다!");
+              count = 0;
+
+            }
+          })
+         
+
+        }
+
+        check.onclick = () => {
+          let choicedate = document.getElementById("datepicker");
+          console.log("datepicker : " + choicedate.value);
+
+          var dataRef = database.ref('date/' + choicedate.value + '/').once('value').then(function(snapshot){
+            if(snapshot.val() == null){
+              alert('기록이 없습니다!');
+            }else{
+
+              let str = JSON.stringify(snapshot.val());
+              let sub = str.slice(9,-1);
+
+              document.getElementById("demo").innerHTML = choicedate.value + '날의 개수는 ' + sub +'개입니다.';
+              //alert(choicedate.value + '날의 개수' + '\n' + JSON.stringify(snapshot.val()));
+              console.log(snapshot.val());
+
+              
+              console.log(sub);
+             
+            }
+            
+          })
+          
+
+        }
+        
+
+    </script>
+    
+</body>
+
+</html>
